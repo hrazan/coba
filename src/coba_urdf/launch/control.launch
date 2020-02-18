@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="model" default="$(find coba_urdf)/urdf/omni_control.urdf.xacro"/>
+  <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz" />
+
+  <include file="$(find coba_urdf)/launch/gazebo.launch">
+    <arg name="model" value="$(arg model)" />
+  </include>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+
+  <rosparam command="load"
+            file="$(find coba_urdf)/config/rldrive.yaml"
+            ns="omni_rl_drive_controller" />
+  <rosparam command="load"
+            file="$(find coba_urdf)/config/fbdrive.yaml"
+            ns="omni_fb_drive_controller" />
+
+  <node name="omni_controller_spawner" pkg="controller_manager" type="spawner"
+    args="omni_rl_drive_controller
+          omni_fb_drive_controller
+          --shutdown-timeout 3"/>
+
+  <node name="rqt_robot_steering_rl" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/omni_rl_drive_controller/cmd_vel"/>
+  </node>
+  <node name="rqt_robot_steering_fb" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="/omni_fb_drive_controller/cmd_vel"/>
+  </node>
+
+</launch>

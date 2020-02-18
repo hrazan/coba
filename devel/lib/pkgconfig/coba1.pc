@@ -1,0 +1,8 @@
+prefix=/home/razan/cobaros/devel
+
+Name: coba1
+Description: Description of coba1
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/razan/cobaros/devel/lib 
+Requires: 

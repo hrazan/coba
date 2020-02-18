@@ -1,0 +1,2 @@
+beginner_tutorials:coba1:coba_urdf:open_base
+-DCATKIN_DEVEL_PREFIX=/home/razan/cobaros/devel -DCMAKE_INSTALL_PREFIX=/home/razan/cobaros/install -G Unix Makefiles

@@ -1,0 +1,13 @@
+#! /usr/bin/env python
+
+import rospy
+from std_msgs.msg import String
+
+rospy.init_node('coba1')
+
+publisher = rospy.Publisher('/say hello', String, queue_size=1)
+rate =rospy.Rate(3) # 3Hz
+
+while not rospy.is_shutdown():
+	publisher.publish('Hey!')
+	rate.sleep()

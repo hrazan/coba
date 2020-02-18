@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<robot name="omni" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <material name="grey">
+    <color rgba="0.65 0.65 0.65 1"/>
+  </material>
+
+  <material name="black">
+    <color rgba="0.3 0.3 0.3 1"/>
+  </material>
+
+  <xacro:macro name="default_inertial" params="mass">
+    <inertial>
+      <mass value="${mass}"/>
+      <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0"/>
+    </inertial>
+  </xacro:macro>
+
+<link name="dummy"></link>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.25"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.3" radius="0.25"/>
+      </geometry>
+    </collision>
+    <xacro:default_inertial mass="10"/>
+  </link>
+  <joint name="dummy_joint" type="fixed">
+    <parent link="dummy"/>
+    <child link="base_link"/>
+  </joint>
+
+  <xacro:macro name="wheel_link" params="name linkrpy axisxyz originxyz">
+    <link name="${name}_wheel">
+      <visual>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${linkrpy}"/>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${linkrpy}"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+
+    <joint name="${name}_wheel_joint" type="continuous">
+      <axis rpy="0 0 0" xyz="${axisxyz}"/>
+      <parent link="base_link"/>
+      <child link="${name}_wheel"/>
+      <origin xyz="${originxyz}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel_link name="left" linkrpy="0 0 0" axisxyz="1 0 0" originxyz="0.22 0 -0.15"/>
+  <xacro:wheel_link name="right" linkrpy="0 0 0" axisxyz="1 0 0" originxyz="-0.22 0 -0.15"/>
+
+  <xacro:macro name="ball_link" params="name linkrpy axisxyz originxyz">
+    <link name="${name}_ball">
+      <visual>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${linkrpy}"/>
+        <material name="black"/>
+      </visual>
+      <collision>
+        <geometry>
+          <sphere radius="0.05"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="${linkrpy}"/>
+      </collision>
+      <xacro:default_inertial mass="1"/>
+    </link>
+
+    <joint name="${name}_ball_joint" type="fixed">
+      <axis rpy="0 0 0" xyz="${axisxyz}"/>
+      <parent link="base_link"/>
+      <child link="${name}_ball"/>
+      <origin xyz="${originxyz}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:ball_link name="front" linkrpy="0 0 0" axisxyz="0 1 0" originxyz="0 0.22 -0.15"/>
+  <xacro:ball_link name="back" linkrpy="0 0 0" axisxyz="0 1 0" originxyz="0 -0.22 -0.15"/>
+
+  <!-- Gazebo plugin for Ros Control-->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+
+</robot>

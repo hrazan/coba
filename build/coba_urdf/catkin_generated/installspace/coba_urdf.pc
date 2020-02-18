@@ -1,0 +1,8 @@
+prefix=/home/razan/cobaros/install
+
+Name: coba_urdf
+Description: Description of coba_urdf
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/razan/cobaros/install/lib 
+Requires: 

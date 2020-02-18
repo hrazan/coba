@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<robot name="test_model">
+
+  <!-- root link, on the ground just below the model origin -->
+  <link name="base_footprint">
+   <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0.0 0 0.15" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="base_link" />
+  </joint>
+
+  <!-- the model -->
+  <link name="base_link">
+    <inertial>
+      <mass value="10" />
+      <inertia ixx="0.2134615385" ixy="0.0" ixz="0.0"
+        iyy="0.2134615385" iyz="0.0"
+        izz="0.3125" />
+    </inertial>
+    <visual>
+      <geometry>
+        <cylinder length="0.3" radius="0.25"/> <!-- does not need to match collision -->
+        <origin xyz="0.0 0 0.35" rpy="0 0 0" />
+      </geometry>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.3" radius="0.25"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo>
+    <plugin name="object_controller" filename="libgazebo_ros_planar_move.so">
+      <commandTopic>cmd_vel</commandTopic>
+      <odometryTopic>odom</odometryTopic>
+      <odometryFrame>odom</odometryFrame>
+      <odometryRate>20.0</odometryRate>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
+    </plugin>
+  </gazebo>
+
+</robot>
